@@ -4,27 +4,27 @@ import java.io.Serializable;
 
 public class Locacion implements Serializable {
 
-    private double latitude;
-    private double longitude;
+    private double latitud;
+    private double longitud;
 
-    public Locacion(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public Locacion(double latitud, double longitud) {
+        this.latitud = latitud;
+        this.longitud = longitud;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public double getLatitud() {
+        return latitud;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public double getLongitud() {
+        return longitud;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
     }
 }

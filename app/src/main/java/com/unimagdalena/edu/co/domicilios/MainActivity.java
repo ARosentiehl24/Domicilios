@@ -1,8 +1,14 @@
 package com.unimagdalena.edu.co.domicilios;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,6 +26,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -31,13 +38,6 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<Restaurante> restaurantes;
-
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
 
         assert mViewPager != null;
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -98,7 +98,8 @@ public class MainActivity extends AppCompatActivity {
     public static class FragmentMapa extends Fragment implements OnMapReadyCallback {
 
         private GoogleMap mMap;
-        private ArrayList<LatLng> latLngs;
+        private ArrayList<Restaurante> restauranteArrayList;
+        private LatLng miUbicacion;
 
         public FragmentMapa() {
 
@@ -111,32 +112,81 @@ public class MainActivity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.fragment_map, container, false);
-
-            return view;
+            return inflater.inflate(R.layout.fragment_map, container, false);
         }
 
         @Override
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
 
+            restauranteArrayList = restaurantes;
+
             SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
-        }
-
-        @Override
-        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
         }
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mMap = googleMap;
 
-            // Add a marker in Sydney and move the camera
-            LatLng sydney = new LatLng(-34, 151);
-            mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+
+            mMap.setMyLocationEnabled(true);
+
+            // Getting LocationManager object from System Service LOCATION_SERVICE
+            LocationManager locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+
+            // Creating a criteria object to retrieve provider
+            Criteria criteria = new Criteria();
+
+            // Getting the name of the best provider
+            String provider = locationManager.getBestProvider(criteria, true);
+
+            // Getting Current Location
+            Location location = locationManager.getLastKnownLocation(provider);
+
+            if (location != null) {
+                // Getting latitude of the current location
+                double latitude = location.getLatitude();
+
+                // Getting longitude of the current location
+                double longitude = location.getLongitude();
+
+                miUbicacion = new LatLng(latitude, longitude);
+
+                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                mMap.addMarker(new MarkerOptions().position(miUbicacion).title("Yo"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(miUbicacion));
+                mMap.animateCamera(CameraUpdateFactory.zoomIn());
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(miUbicacion)      // Sets the center of the map to Mountain View
+                        .zoom(15)                   // Sets the zoom
+                        .bearing(0)                // Sets the orientation of the camera to east
+                        .tilt(0)                   // Sets the tilt of the camera to 30 degrees
+                        .build();                   // Creates a CameraPosition from the builder
+
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+
+            for (Restaurante restaurante : restauranteArrayList) {
+                double latitude = restaurante.getCoordenadas().getLatitud();
+                double longitude = restaurante.getCoordenadas().getLongitud();
+
+                LatLng latLng = new LatLng(latitude, longitude);
+
+                mMap.addMarker(new MarkerOptions().position(latLng).title(restaurante.getNombre()));
+            }
         }
     }
 
@@ -148,8 +198,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a FragmentRestaurantes (defined as a static inner class below).
             switch (position) {
                 case 1:
                     return FragmentMapa.newInstance();
@@ -162,7 +210,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return 2;
         }
 
