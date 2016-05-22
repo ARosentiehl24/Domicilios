@@ -4,9 +4,9 @@ import android.app.Application;
 
 public class Domicilios extends Application {
 
-    private Domicilios domicilios;
+    private static Domicilios domicilios;
 
-    public Domicilios getInstance() {
+    public static Domicilios getInstance() {
         return domicilios;
     }
 
