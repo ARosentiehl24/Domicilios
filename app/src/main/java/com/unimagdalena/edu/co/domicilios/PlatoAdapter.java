@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.rafakob.drawme.DrawMeButton;
 
 import java.util.ArrayList;
 
@@ -36,11 +39,18 @@ public class PlatoAdapter extends RecyclerView.Adapter<PlatoAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Plato plato = platos.get(position);
+        final Plato plato = platos.get(position);
 
         holder.nombrePlato.setText(plato.getNombre());
         holder.descripcionPlato.setText(plato.getDescripcion());
         holder.precioPlato.setText(String.format("$%s", plato.getPrecio()));
+
+        holder.botonAgregar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(activity, "Click" + plato.getPrecio(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -58,6 +68,12 @@ public class PlatoAdapter extends RecyclerView.Adapter<PlatoAdapter.ViewHolder> 
 
         @Bind(R.id.precio_plato)
         TextView precioPlato;
+
+        @Bind(R.id.botonAgregar)
+        DrawMeButton botonAgregar;
+
+        @Bind(R.id.botonQuitar)
+        DrawMeButton botonQuitar;
 
         public ViewHolder(View itemView) {
             super(itemView);
