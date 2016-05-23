@@ -1,19 +1,17 @@
 package com.unimagdalena.edu.co.domicilios;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +19,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.rafakob.drawme.DrawMeButton;
 import com.rafakob.drawme.DrawMeTextView;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -63,15 +60,23 @@ public class RestauranteActivity extends AppCompatActivity {
         @Bind(R.id.recyclerView)
         RecyclerView recyclerView;
 
+        private ArrayList<Plato> platosPedidos = new ArrayList<>();
+        private Double precioOrden;
         private DrawMeTextView totalItems;
         private PlatoAdapter platoAdapter;
+        public static PlatoFragment platoFragment;
         private TextView totalPrice;
 
         public PlatoFragment() {
+            platoFragment = this;
         }
 
         public static PlatoFragment newInstance() {
             return new PlatoFragment();
+        }
+
+        public static PlatoFragment getInstance() {
+            return platoFragment;
         }
 
         @Override
@@ -110,14 +115,22 @@ public class RestauranteActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), OrdenActivity.class);
 
+                    Compra compra = new Compra(platosPedidos, totalCompra(), restaurante);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("compra", compra);
+
+                    intent.putExtras(bundle);
+
                     startActivity(intent);
 
                     getActivity().overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_top);
                 }
             });
 
-            totalPrice = (TextView) view.findViewById(R.id.total_price);
-            totalPrice.setText("$0");
+            totalPrice = (TextView) view.findViewById(R.id.precio_total);
+            precioOrden = 0.0;
+            totalPrice.setText(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(precioOrden));
 
             totalItems = (DrawMeTextView) view.findViewById(R.id.total_items);
 
@@ -128,6 +141,46 @@ public class RestauranteActivity extends AppCompatActivity {
             recyclerView.setHasFixedSize(true);
             recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), null, false, true));
             recyclerView.setAdapter(platoAdapter);
+        }
+
+        public void establecerCostoTotal(Plato plato, int type) {
+            Double precioTotal = precioOrden;
+
+            if (type == 0) {
+                precioTotal += plato.getPrecio();
+            } else {
+                if (platosPedidos.contains(plato)) {
+                    if ((precioTotal - plato.getPrecio()) < 0) {
+                        precioTotal = 0.0;
+                    } else {
+                        precioTotal -= plato.getPrecio();
+                    }
+                }
+            }
+
+            precioOrden = precioTotal;
+
+            totalPrice.setText(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(precioOrden));
+        }
+
+        public void establecerCantidadPlatos(Plato plato, int type) {
+            if (type == 0) {
+                platosPedidos.add(plato);
+            } else {
+                platosPedidos.remove(plato);
+            }
+
+            totalItems.setText(String.valueOf(platosPedidos.size()));
+        }
+
+        public double totalCompra() {
+            double total = 0.0;
+
+            for (Plato plato : platosPedidos) {
+                total += plato.getPrecio();
+            }
+
+            return total;
         }
     }
 

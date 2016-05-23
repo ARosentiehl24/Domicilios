@@ -13,13 +13,13 @@
         app:cardCornerRadius="0dp"
         app:cardElevation="2.5dp">
 
-        <android.support.v7.widget.AppCompatEditText
+        <EditText
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:drawableStart="@drawable/ic_search_red_24dp"
-            android:hint="Buscar Restaurante"
+            android:hint="@string/buscar_restaurante"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxLines="1" />

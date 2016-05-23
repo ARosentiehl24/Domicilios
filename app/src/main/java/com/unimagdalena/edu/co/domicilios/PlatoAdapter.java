@@ -7,11 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rafakob.drawme.DrawMeButton;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -20,10 +21,12 @@ public class PlatoAdapter extends RecyclerView.Adapter<PlatoAdapter.ViewHolder> 
 
     private Activity activity;
     private ArrayList<Plato> platos;
+    private RestauranteActivity.PlatoFragment platoFragment;
 
     public PlatoAdapter(Activity activity, ArrayList<Plato> platos) {
         this.activity = activity;
         this.platos = platos;
+        this.platoFragment = RestauranteActivity.PlatoFragment.getInstance();
     }
 
     @Override
@@ -43,12 +46,20 @@ public class PlatoAdapter extends RecyclerView.Adapter<PlatoAdapter.ViewHolder> 
 
         holder.nombrePlato.setText(plato.getNombre());
         holder.descripcionPlato.setText(plato.getDescripcion());
-        holder.precioPlato.setText(String.format("$%s", plato.getPrecio()));
+        holder.precioPlato.setText(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(plato.getPrecio()));
 
         holder.botonAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(activity, "Click" + plato.getPrecio(), Toast.LENGTH_SHORT).show();
+                platoFragment.establecerCostoTotal(plato, 0);
+                platoFragment.establecerCantidadPlatos(plato, 0);
+            }
+        });
+        holder.botonQuitar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                platoFragment.establecerCostoTotal(plato, 1);
+                platoFragment.establecerCantidadPlatos(plato, 1);
             }
         });
     }

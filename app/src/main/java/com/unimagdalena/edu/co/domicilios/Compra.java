@@ -1,8 +1,9 @@
 package com.unimagdalena.edu.co.domicilios;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Compra {
+public class Compra implements Serializable {
 
     private ArrayList<Plato> platos;
     private Double total;

@@ -17,10 +17,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -65,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static class FragmentRestaurantes extends Fragment {
 
+        @Bind(R.id.searchView)
+        EditText searchView;
+
         @Bind(R.id.recyclerView)
         RecyclerView recyclerView;
 
@@ -92,6 +98,34 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setHasFixedSize(true);
             recyclerView.setAdapter(restauranteAdapter);
+
+            searchView.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    ArrayList<Restaurante> restaurantesFiltrados = new ArrayList<>();
+
+                    for (Restaurante restaurante : restaurantes) {
+                        if (restaurante.getNombre().toLowerCase().contains(s.toString().toLowerCase())) {
+                            restaurantesFiltrados.add(restaurante);
+                        }
+                    }
+
+                    restauranteAdapter = new RestauranteAdapter(getActivity(), restaurantesFiltrados);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setAdapter(restauranteAdapter);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
         }
     }
 
@@ -164,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
                 miUbicacion = new LatLng(latitude, longitude);
 
                 mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                mMap.addMarker(new MarkerOptions().position(miUbicacion).title("Mi ubicación"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(miUbicacion));
                 mMap.animateCamera(CameraUpdateFactory.zoomIn());
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);

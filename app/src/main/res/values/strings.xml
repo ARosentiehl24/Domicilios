@@ -26,5 +26,6 @@
     <string name="total">Total:</string>
     <string name="subtotal">Subtotal</string>
     <string name="pedido_confirmado">¡Pedido Confirmado!</string>
-    <string name="mensaje_tiempo_entrega">Tu pedido llegará en</string>
+    <string name="mensaje_tiempo_entrega">Tu pedido llegará entre </string>
+    <string name="buscar_restaurante">Buscar Restaurante</string>
 </resources>
