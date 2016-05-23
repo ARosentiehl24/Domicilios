@@ -80,10 +80,4 @@
                 app:dm_rippleEffect="true" />
         </RelativeLayout>
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:background="#D6D6D6" />
 </RelativeLayout>

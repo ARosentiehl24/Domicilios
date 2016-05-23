@@ -1,7 +1,7 @@
 package com.unimagdalena.edu.co.domicilios;
 
+import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,17 +13,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.rafakob.drawme.DrawMeTextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,7 +60,9 @@ public class RestauranteActivity extends AppCompatActivity {
         @Bind(R.id.recyclerView)
         RecyclerView recyclerView;
 
+        private DrawMeTextView totalItems;
         private PlatoAdapter platoAdapter;
+        private TextView totalPrice;
 
         public PlatoFragment() {
         }
@@ -88,23 +92,48 @@ public class RestauranteActivity extends AppCompatActivity {
 
             TextView metodosPago = (TextView) view.findViewById(R.id.metodos_pago);
 
-            for (TipoPago tipoPago : restaurante.getTipoPago()) {
-                Log.d("TipoPago", tipoPago.getTipoPago());
-            }
-
             TextView pedidoMinimo = (TextView) view.findViewById(R.id.pedido_minimo);
             pedidoMinimo.setText(String.format("$%s", restaurante.getPrecioMinimo()));
+
+            TextView costoEnvio = (TextView) view.findViewById(R.id.costo_envio);
+            costoEnvio.setText(String.format("$%s", restaurante.getPrecioEnvio()));
+
+            TextView tiempoEntrega = (TextView) view.findViewById(R.id.tiempo_entrega);
+            tiempoEntrega.setText(String.format(Locale.US, "%d Minutos", restaurante.getTiempoEntrega()));
+
+            LinearLayout verOrden = (LinearLayout) view.findViewById(R.id.ver_orden);
+            verOrden.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), OrdenActivity.class);
+
+                    startActivity(intent);
+
+                    getActivity().overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_top);
+                }
+            });
+
+            totalPrice = (TextView) view.findViewById(R.id.total_price);
+            totalPrice.setText("$0");
+
+            totalItems = (DrawMeTextView) view.findViewById(R.id.total_items);
 
             ArrayList<Plato> platos = restaurante.getMenu();
 
             platoAdapter = new PlatoAdapter(getActivity(), platos);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setHasFixedSize(true);
+            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), null, false, true));
             recyclerView.setAdapter(platoAdapter);
         }
     }
 
     public static class ComentarioFragment extends Fragment {
+
+        @Bind(R.id.recyclerView)
+        RecyclerView recyclerView;
+
+        private ComentarioAdapter comentarioAdapter;
 
         public ComentarioFragment() {
         }
@@ -121,6 +150,15 @@ public class RestauranteActivity extends AppCompatActivity {
         @Override
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
+            ButterKnife.bind(this, view);
+
+            ArrayList<Comentario> comentarios = restaurante.getComentarios();
+
+            comentarioAdapter = new ComentarioAdapter(getActivity(), comentarios);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), null, false, true));
+            recyclerView.setAdapter(comentarioAdapter);
         }
     }
 
@@ -132,7 +170,7 @@ public class RestauranteActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position){
+            switch (position) {
                 case 0:
                     return PlatoFragment.newInstance();
                 case 1:

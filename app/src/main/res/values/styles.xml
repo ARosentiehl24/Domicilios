@@ -18,6 +18,15 @@
         <item name="android:windowBackground">@color/domiclios</item>
     </style>
 
+    <style name="OrdenAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/background_car_shop</item>
+        <item name="colorPrimaryDark">@color/background_car_shop</item>
+        <item name="colorAccent">@color/background_car_shop</item>
+        <item name="android:navigationBarColor">@color/background_car_shop</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 miUbicacion = new LatLng(latitude, longitude);
 
                 mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                mMap.addMarker(new MarkerOptions().position(miUbicacion).title("Yo"));
+                mMap.addMarker(new MarkerOptions().position(miUbicacion).title("Mi ubicación"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(miUbicacion));
                 mMap.animateCamera(CameraUpdateFactory.zoomIn());
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);

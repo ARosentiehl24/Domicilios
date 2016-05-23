@@ -42,4 +42,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.android.gms:play-services:9.0.0'
     compile 'com.github.dmytrodanylyk.shadow-layout:library:1.0.3'
+    compile 'com.labo.kaji:fragmentanimations:0.1.0'
 }
