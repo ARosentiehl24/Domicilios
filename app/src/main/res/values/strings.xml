@@ -10,4 +10,12 @@
     <string name="restaurantes">Restaurantes</string>
     <string name="mapa">Mapa</string>
     <string name="title_activity_restaurante">Restaurante</string>
+    <string name="metodos_de_pago">Métodos de pago</string>
+    <string name="pedido_minimo">Pedido Minímo</string>
+    <string name="costo_envio">Costo Envio</string>
+    <string name="tiempo_de_entrega">Tiempo de Entrega</string>
+    <string name="ver_orden">Ver Orden</string>
+    <string name="number_0">0</string>
+    <string name="add">+</string>
+    <string name="quit">-</string>
 </resources>

@@ -2,6 +2,8 @@ package com.unimagdalena.edu.co.domicilios;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,9 +20,6 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by alber on 21/05/2016.
- */
 public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.ViewHolder> {
 
     private Activity activity;
@@ -98,7 +97,14 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
 
         @Override
         public void onClick(View v) {
+            Intent intent = new Intent(activity, RestauranteActivity.class);
 
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("restaurante", restaurantes.get(getLayoutPosition()));
+
+            intent.putExtras(bundle);
+
+            activity.startActivity(intent);
         }
     }
 }

@@ -50,6 +50,7 @@
     <color name="android">#FFA4C639</color>
     <color name="firefox">#FFE66000</color>
     <color name="domiclios">#D21834</color>
+    <color name="background_car_shop">#498BF4</color>
 
     <!-- Flat UI Colors -->
     <eat-comment />

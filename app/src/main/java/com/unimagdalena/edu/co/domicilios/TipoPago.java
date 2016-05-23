@@ -2,12 +2,22 @@ package com.unimagdalena.edu.co.domicilios;
 
 import java.io.Serializable;
 
-/**
- * Created by alber on 21/05/2016.
- */
-
 public enum TipoPago implements Serializable {
-    EFECTIVO,
-    CREDITO,
-    DEBITO
+    EFECTIVO("Efectivo"),
+    CREDITO("Credito"),
+    DEBITO("Debito");
+
+    private String tipoPago;
+
+    TipoPago(String tipoPAgo) {
+        this.tipoPago = tipoPAgo;
+    }
+
+    public String getTipoPago() {
+        return tipoPago;
+    }
+
+    public void setTipoPago(String tipoPago) {
+        this.tipoPago = tipoPago;
+    }
 }
