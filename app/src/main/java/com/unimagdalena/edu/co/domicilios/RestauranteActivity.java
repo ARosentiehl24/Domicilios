@@ -101,10 +101,10 @@ public class RestauranteActivity extends AppCompatActivity {
             TextView metodosPago = (TextView) view.findViewById(R.id.metodos_pago);
 
             TextView pedidoMinimo = (TextView) view.findViewById(R.id.pedido_minimo);
-            pedidoMinimo.setText(String.format("$%s", restaurante.getPrecioMinimo()));
+            pedidoMinimo.setText(Util.formatoPeso(restaurante.getPrecioMinimo()));
 
             TextView costoEnvio = (TextView) view.findViewById(R.id.costo_envio);
-            costoEnvio.setText(String.format("$%s", restaurante.getPrecioEnvio()));
+            costoEnvio.setText(Util.formatoPeso(restaurante.getPrecioEnvio()));
 
             TextView tiempoEntrega = (TextView) view.findViewById(R.id.tiempo_entrega);
             tiempoEntrega.setText(String.format(Locale.US, "%d Minutos", restaurante.getTiempoEntrega()));

@@ -49,7 +49,7 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
         holder.nombreRestaurante.setText(restaurante.getNombre());
         holder.rating.setRating(restaurante.getCalificacion());
         holder.categoria.setText(restaurante.getCategoria());
-        holder.pedidoMinimo.setText(String.format("Pedido minimo: $%s", restaurante.getPrecioMinimo()));
+        holder.pedidoMinimo.setText(Util.formatoPeso(restaurante.getPrecioMinimo()));
 
         if (restaurante.getEstado()) {
             holder.estadoRestaurante.setText("Abierto");
