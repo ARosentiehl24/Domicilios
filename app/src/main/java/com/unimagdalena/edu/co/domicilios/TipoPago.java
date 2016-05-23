@@ -7,17 +7,17 @@ public enum TipoPago implements Serializable {
     CREDITO("Credito"),
     DEBITO("Debito");
 
-    private String tipoPago;
+    private String nombre;
 
-    TipoPago(String tipoPAgo) {
-        this.tipoPago = tipoPAgo;
+    TipoPago(String nombre) {
+        this.nombre = nombre;
     }
 
-    public String getTipoPago() {
-        return tipoPago;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setTipoPago(String tipoPago) {
-        this.tipoPago = tipoPago;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }

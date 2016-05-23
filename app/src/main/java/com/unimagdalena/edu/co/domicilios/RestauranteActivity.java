@@ -100,6 +100,18 @@ public class RestauranteActivity extends AppCompatActivity {
 
             TextView metodosPago = (TextView) view.findViewById(R.id.metodos_pago);
 
+            String tipos = "";
+
+            for (String s : restaurante.getTipoPago()) {
+                for (TipoPago tipoPago: TipoPago.values()) {
+                    if (s.equals(tipoPago.getNombre())) {
+                        tipos += " " + tipoPago.getNombre();
+                    }
+                }
+            }
+
+            metodosPago.setText(tipos);
+
             TextView pedidoMinimo = (TextView) view.findViewById(R.id.pedido_minimo);
             pedidoMinimo.setText(Util.formatoPeso(restaurante.getPrecioMinimo()));
 

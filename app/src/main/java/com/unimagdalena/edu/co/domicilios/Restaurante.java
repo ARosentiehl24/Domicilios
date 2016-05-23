@@ -9,7 +9,7 @@ public class Restaurante implements Serializable {
     private String categoria;
     private String direccion;
     private Integer calificacion;
-    private TipoPago[] tipoPago;
+    private String[] tipoPago;
     private Locacion coordenadas;
     private String imagen;
     private Double precioEnvio;
@@ -20,7 +20,7 @@ public class Restaurante implements Serializable {
     private ArrayList<Plato> menu;
     private Integer tiempoEntrega;
 
-    public Restaurante(String nombre, String categoria, String direccion, Integer calificacion, TipoPago[] tipoPago, Locacion coordenadas, String imagen, Double precioEnvio, Boolean estado, String telefono, String precioMinimo, ArrayList<Comentario> comentarios, ArrayList<Plato> menu, Integer tiempoEntrega) {
+    public Restaurante(String nombre, String categoria, String direccion, Integer calificacion, String[] tipoPago, Locacion coordenadas, String imagen, Double precioEnvio, Boolean estado, String telefono, String precioMinimo, ArrayList<Comentario> comentarios, ArrayList<Plato> menu, Integer tiempoEntrega) {
         this.nombre = nombre;
         this.categoria = categoria;
         this.direccion = direccion;
@@ -69,11 +69,11 @@ public class Restaurante implements Serializable {
         this.calificacion = calificacion;
     }
 
-    public TipoPago[] getTipoPago() {
+    public String[] getTipoPago() {
         return tipoPago;
     }
 
-    public void setTipoPago(TipoPago[] tipoPago) {
+    public void setTipoPago(String[] tipoPago) {
         this.tipoPago = tipoPago;
     }
 
